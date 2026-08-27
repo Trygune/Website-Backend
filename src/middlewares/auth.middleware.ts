@@ -12,7 +12,7 @@ const protect = (req: Request, res: Response, next: NextFunction) => {
 
   if (!token) {
     logger.warn('Authentication is required')
-    res.json({
+    res.status(401).json({
       success: false,
       message: 'Authentication required',
     })

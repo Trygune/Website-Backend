@@ -4,6 +4,7 @@ import { projectRouter } from './routes/project.routes.ts'
 import { postRouter } from './routes/post.routes.ts'
 import { experienceRouter } from './routes/experience.routes.ts'
 import { dashboardRouter } from './routes/dashboard.routes.ts'
+import { uploadRouter } from './routes/upload.routes.ts'
 import './config/passport.ts'
 import passport from 'passport'
 import { pinoHttp } from 'pino-http'
@@ -32,6 +33,7 @@ app.use('/api/projects', projectRouter)
 app.use('/api/posts', postRouter)
 app.use('/api/experience', experienceRouter)
 app.use('/api/dashboard', dashboardRouter)
+app.use('/api/uploads', uploadRouter)
 
 app.use(errorHandler.notFoundHandler)
 
