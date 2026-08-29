@@ -8,7 +8,13 @@ import {
 
 const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const experience = await getExperiences()
+    const technologies = req.query.technologies
+      ? String(req.query.technologies)
+          .split(',')
+          .map((tag) => tag.trim())
+          .filter(Boolean)
+      : undefined
+    const experience = await getExperiences(req.query, technologies)
 
     return res.status(200).json({
       success: true,

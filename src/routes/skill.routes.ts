@@ -4,12 +4,13 @@ import validator from '../middlewares/validator.middleware.ts'
 import skillController from '../controllers/skill.controller.ts'
 import {
   createSkillValidator,
+  getSkillsValidator,
   updateSkillValidator,
 } from '../validators/skill.validator.ts'
 
 export const skillRouter = express.Router()
 
-skillRouter.get('/', skillController.get)
+skillRouter.get('/', getSkillsValidator, validator, skillController.get)
 
 skillRouter.post(
   '/',

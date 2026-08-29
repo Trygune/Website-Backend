@@ -5,11 +5,12 @@ import validator from '../middlewares/validator.middleware.ts'
 import {
   createPostValidator,
   updatePostValidator,
+  getPostsValidator,
 } from '../validators/post.validator.ts'
 
 export const postRouter = express.Router()
 
-postRouter.get('/', postController.get)
+postRouter.get('/', getPostsValidator, validator, postController.get)
 postRouter.get('/:slug', postController.getBySlug)
 
 postRouter.post(

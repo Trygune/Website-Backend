@@ -2,24 +2,24 @@ import type { HydratedDocument } from 'mongoose'
 import mongoose from 'mongoose'
 
 export interface IProject {
-  title: String
-  slug: String
-  description: String
-  fullDescription: String
-  overview: String
-  features: String[]
-  role: String
-  year: String
-  technologies: String[]
+  title: string
+  slug: string
+  description: string
+  fullDescription: string
+  overview: string
+  features: string[]
+  role: string
+  year: string
+  technologies: string[]
   challengesSolutions: {
     challenge: string
     solution: string
   }[]
-  coverImage: String
-  githubUrl: String
-  liveUrl: String
-  featured: String
-  status: String
+  coverImage: string
+  githubUrl: string
+  liveUrl: string
+  featured: boolean
+  status: string
   createdAt: Date
   updatedAt: Date
 }
@@ -46,7 +46,7 @@ const projectSchema = new mongoose.Schema<IProject>(
     coverImage: String,
     githubUrl: String,
     liveUrl: String,
-    featured: String,
+    featured: Boolean,
     status: String,
     createdAt: Date,
     updatedAt: Date,

@@ -1,7 +1,22 @@
 import Project, { type IProject } from '../models/Project.ts'
 
-export const getProjects = () => {
-  return Project.find({})
+type ProjectQuery = {
+  featured?: boolean
+  status?: 'draft' | 'published'
+  role?: string
+  year?: string
+  technologies?: string[]
+}
+
+export const getProjects = (query: ProjectQuery, technologies?: string[]) => {
+  const filter = {
+    ...(technologies?.length && {
+      technologies: {
+        $all: technologies,
+      },
+    }),
+  }
+  return Project.find({ ...query, ...filter })
 }
 
 export const getProjectBySlug = (slug: string) => {

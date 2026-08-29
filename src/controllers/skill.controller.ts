@@ -8,7 +8,7 @@ import {
 
 const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const skill = await getSkills()
+    const skill = await getSkills(req.query)
 
     return res.status(200).json({
       success: true,

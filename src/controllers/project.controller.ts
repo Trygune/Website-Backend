@@ -9,7 +9,13 @@ import {
 
 const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const projects = await getProjects()
+    const technologies = req.query.technologies
+      ? String(req.query.technologies)
+          .split(',')
+          .map((tag) => tag.trim())
+          .filter(Boolean)
+      : undefined
+    const projects = await getProjects(req.query, technologies)
 
     return res.status(200).json({
       success: true,

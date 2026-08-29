@@ -1,4 +1,4 @@
-import { body } from 'express-validator'
+import { body, query } from 'express-validator'
 
 export const createPostValidator = [
   body('title')
@@ -101,4 +101,14 @@ export const updatePostValidator = [
     .optional({ values: 'null' })
     .isISO8601()
     .withMessage('publishedAt must be a valid date'),
+]
+
+export const getPostsValidator = [
+  query('category').optional().isString().trim(),
+  query('tags').optional().isString().trim(),
+
+  query('status')
+    .optional()
+    .isIn(['draft', 'published'])
+    .withMessage('Invalid post status'),
 ]

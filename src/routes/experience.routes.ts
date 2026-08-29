@@ -5,11 +5,17 @@ import validator from '../middlewares/validator.middleware.ts'
 import {
   createExperienceValidator,
   updateExperienceValidator,
+  getExperiencesValidator,
 } from '../validators/experience.validator.ts'
 
 export const experienceRouter = express.Router()
 
-experienceRouter.get('/', experienceController.get)
+experienceRouter.get(
+  '/',
+  getExperiencesValidator,
+  validator,
+  experienceController.get
+)
 
 experienceRouter.post(
   '/',

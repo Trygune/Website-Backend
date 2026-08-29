@@ -1,4 +1,4 @@
-import { body } from 'express-validator'
+import { body, query } from 'express-validator'
 
 export const createExperienceValidator = [
   body('role')
@@ -82,4 +82,17 @@ export const updateExperienceValidator = [
     .optional()
     .isBoolean()
     .withMessage('Current must be a boolean'),
+]
+
+export const getExperiencesValidator = [
+  query('current')
+    .optional()
+    .isBoolean()
+    .withMessage('current must be a boolean')
+    .toBoolean(),
+
+  query('type').optional().isString().trim(),
+  query('location').optional().isString().trim(),
+  query('role').optional().isString().trim(),
+  query('technologies').optional().isString().trim(),
 ]

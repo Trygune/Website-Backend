@@ -1,7 +1,25 @@
 import Experience, { type IExperience } from '../models/Experience.ts'
 
-export const getExperiences = () => {
-  return Experience.find({})
+type ExperienceQuery = {
+  current?: boolean
+  type?: string
+  location?: string
+  role?: string
+  technologies?: string[]
+}
+
+export const getExperiences = (
+  query: ExperienceQuery,
+  technologies?: string[]
+) => {
+  const filter = {
+    ...(technologies?.length && {
+      technologies: {
+        $all: technologies,
+      },
+    }),
+  }
+  return Experience.find({ ...query, ...filter })
 }
 
 export const createExperience = (data: IExperience) => {

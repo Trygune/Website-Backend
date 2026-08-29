@@ -1,15 +1,15 @@
 import mongoose, { type HydratedDocument } from 'mongoose'
 
 export interface IPost {
-  title: String
-  slug: String
-  excerpt: String
-  content: String
-  readTime: String
-  coverImage: String
-  category: String
-  tags: String[]
-  status: String
+  title: string
+  slug: string
+  excerpt: string
+  content: string
+  readTime: string
+  coverImage: string
+  category: string
+  tags: string[]
+  status: string
   publishedAt: Date
   createdAt: Date
   updatedAt: Date

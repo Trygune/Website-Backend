@@ -1,4 +1,4 @@
-import { body } from 'express-validator'
+import { body, query } from 'express-validator'
 
 export const createSkillValidator = [
   body('name')
@@ -105,4 +105,19 @@ export const updateSkillValidator = [
     .optional()
     .isInt({ min: 0 })
     .withMessage('Order must be a non-negative integer.'),
+]
+
+export const getSkillsValidator = [
+  query('featured')
+    .optional()
+    .isBoolean()
+    .withMessage('featured must be a boolean')
+    .toBoolean(),
+
+  query('category').optional().isString().trim(),
+
+  query('level')
+    .optional()
+    .isIn(['Beginner', 'Intermediate', 'Advanced'])
+    .withMessage('Invalid skill level'),
 ]

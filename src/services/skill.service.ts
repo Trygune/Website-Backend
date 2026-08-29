@@ -1,7 +1,13 @@
 import Skill, { type ISkill } from '../models/Skill.ts'
 
-export const getSkills = () => {
-  return Skill.find({})
+type SkillQuery = {
+  featured?: boolean
+  category?: string
+  level?: 'Beginner' | 'Intermediate' | 'Advanced'
+}
+
+export const getSkills = (query: SkillQuery) => {
+  return Skill.find(query)
 }
 
 export const createSkill = (data: ISkill) => {

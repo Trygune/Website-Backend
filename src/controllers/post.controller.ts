@@ -9,7 +9,13 @@ import {
 
 const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const post = await getPosts()
+    const tags = req.query.tags
+      ? String(req.query.tags)
+          .split(',')
+          .map((tag) => tag.trim())
+          .filter(Boolean)
+      : undefined
+    const post = await getPosts(req.query, tags)
 
     return res.status(200).json({
       success: true,

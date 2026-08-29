@@ -1,7 +1,21 @@
 import Post, { type IPost } from '../models/Post.ts'
 
-export const getPosts = () => {
-  return Post.find({})
+type PostQuery = {
+  category?: string
+  tags?: string[]
+  status?: 'draft' | 'published'
+}
+
+export const getPosts = (query: PostQuery, tags?: string[]) => {
+  const filter = {
+    ...(tags?.length && {
+      tags: {
+        $all: tags,
+      },
+    }),
+  }
+
+  return Post.find({ ...query, ...filter })
 }
 
 export const getPostBySlug = (slug: string) => {

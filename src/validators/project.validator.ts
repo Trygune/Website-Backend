@@ -1,4 +1,4 @@
-import { body } from 'express-validator'
+import { body, query } from 'express-validator'
 
 export const createProjectValidator = [
   body('title')
@@ -108,4 +108,23 @@ export const updateProjectValidator = [
     .optional()
     .isIn(['draft', 'published'])
     .withMessage('Status must be either draft or published'),
+]
+
+export const getProjectsValidator = [
+  query('featured')
+    .optional()
+    .isBoolean()
+    .withMessage('featured must be a boolean')
+    .toBoolean(),
+
+  query('role').optional().isString().trim(),
+
+  query('year').optional().isString().trim(),
+
+  query('status')
+    .optional()
+    .isIn(['draft', 'published'])
+    .withMessage('Invalid project status'),
+
+  query('technologies').optional().isString().trim(),
 ]
