@@ -9,6 +9,11 @@ export interface IExperience {
   endDate: String
   current: Boolean
   technologies: String[]
+  period: string
+  responsibilities: string[]
+  location: string
+  position: string
+  companyUrl: string
   createdAt: Date
   updatedAt: Date
 }
@@ -25,11 +30,26 @@ const experienceSchema = new mongoose.Schema<IExperience>(
     endDate: String,
     current: Boolean,
     technologies: [String],
+    period: String,
+    responsibilities: [String],
+    location: String,
+    position: String,
+    companyUrl: String,
     createdAt: Date,
     updatedAt: Date,
   },
   { timestamps: true }
 )
+
+experienceSchema.set('toJSON', {
+  transform: (_doc, ret) => {
+    ret.id = ret._id.toString()
+    delete ret._id
+    delete ret.__v
+
+    return ret
+  },
+})
 
 const Experience = mongoose.model<IExperience>('experiences', experienceSchema)
 

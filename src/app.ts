@@ -3,6 +3,7 @@ import { authRouter } from './routes/auth.routes.ts'
 import { projectRouter } from './routes/project.routes.ts'
 import { postRouter } from './routes/post.routes.ts'
 import { experienceRouter } from './routes/experience.routes.ts'
+import { skillRouter } from './routes/skill.routes.ts'
 import { dashboardRouter } from './routes/dashboard.routes.ts'
 import { uploadRouter } from './routes/upload.routes.ts'
 import './config/passport.ts'
@@ -11,12 +12,22 @@ import { pinoHttp } from 'pino-http'
 import logger from './utils/logger.ts'
 import errorHandler from './middlewares/error.middleware.ts'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
+
+const apiVersion = process.env.API_VERSION
 
 const app: Express = express()
 
 app.use(
   pinoHttp({
     logger,
+  })
+)
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
   })
 )
 
@@ -28,12 +39,13 @@ app.use(cookieParser())
 
 app.use(passport.initialize())
 
-app.use('/api/auth', authRouter)
-app.use('/api/projects', projectRouter)
-app.use('/api/posts', postRouter)
-app.use('/api/experience', experienceRouter)
-app.use('/api/dashboard', dashboardRouter)
-app.use('/api/uploads', uploadRouter)
+app.use(`/api/${apiVersion}/auth`, authRouter)
+app.use(`/api/${apiVersion}/projects`, projectRouter)
+app.use(`/api/${apiVersion}/posts`, postRouter)
+app.use(`/api/${apiVersion}/experiences`, experienceRouter)
+app.use(`/api/${apiVersion}/skills`, skillRouter)
+app.use(`/api/${apiVersion}/dashboard`, dashboardRouter)
+app.use(`/api/${apiVersion}/uploads`, uploadRouter)
 
 app.use(errorHandler.notFoundHandler)
 

@@ -22,6 +22,16 @@ export const userSchema = new mongoose.Schema<IUser>({
   role: { type: String, enum: ['ADMIN'], default: 'ADMIN' },
 })
 
+userSchema.set('toJSON', {
+  transform: (_doc, ret) => {
+    ret.id = ret._id.toString()
+    delete ret._id
+    delete ret.__v
+
+    return ret
+  },
+})
+
 const User = mongoose.model<IUser>('users', userSchema)
 
 export default User

@@ -6,7 +6,15 @@ export interface IProject {
   slug: String
   description: String
   fullDescription: String
+  overview: String
+  features: String[]
+  role: String
+  year: String
   technologies: String[]
+  challengesSolutions: {
+    challenge: string
+    solution: string
+  }[]
   coverImage: String
   githubUrl: String
   liveUrl: String
@@ -24,7 +32,17 @@ const projectSchema = new mongoose.Schema<IProject>(
     slug: String,
     description: String,
     fullDescription: String,
+    role: String,
+    year: String,
     technologies: [String],
+    overview: String,
+    features: [String],
+    challengesSolutions: [
+      {
+        challenge: String,
+        solution: String,
+      },
+    ],
     coverImage: String,
     githubUrl: String,
     liveUrl: String,
@@ -35,6 +53,16 @@ const projectSchema = new mongoose.Schema<IProject>(
   },
   { timestamps: true }
 )
+
+projectSchema.set('toJSON', {
+  transform: (_doc, ret) => {
+    ret.id = ret._id.toString()
+    delete ret._id
+    delete ret.__v
+
+    return ret
+  },
+})
 
 const Project = mongoose.model<IProject>('projects', projectSchema)
 
