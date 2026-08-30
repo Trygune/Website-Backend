@@ -95,4 +95,21 @@ export const getExperiencesValidator = [
   query('location').optional().isString().trim(),
   query('role').optional().isString().trim(),
   query('technologies').optional().isString().trim(),
+  query('page')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('page must be a positive integer')
+    .toInt(),
+
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 100 })
+    .withMessage('limit must be between 1 and 100')
+    .toInt(),
+  query('sort')
+    .optional()
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage('sort cannot be empty'),
 ]

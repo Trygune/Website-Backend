@@ -1,14 +1,41 @@
 import Project, { type IProject } from '../models/Project.ts'
+import { getPagination, getPaginationMeta, parseSort } from '../utils/query.ts'
 
 type ProjectQuery = {
+  page?: number
+  limit?: number
+  sort?: string
   featured?: boolean
   status?: 'draft' | 'published'
   role?: string
   year?: string
-  technologies?: string[]
+  technologies?: string
 }
 
-export const getProjects = (query: ProjectQuery, technologies?: string[]) => {
+const PROJECT_SORT_FIELDS = [
+  'createdAt',
+  'updatedAt',
+  'title',
+  'year',
+  'featured',
+]
+
+export const getProjects = async (
+  query: ProjectQuery,
+  technologies?: string[]
+) => {
+  const { page, limit, skip } = getPagination(query)
+
+  const sort = parseSort(query.sort, PROJECT_SORT_FIELDS, '-featured -year')
+
+  const {
+    page: _,
+    limit: __,
+    sort: ___,
+    technologies: ____,
+    ...queries
+  } = query
+
   const filter = {
     ...(technologies?.length && {
       technologies: {
@@ -16,7 +43,24 @@ export const getProjects = (query: ProjectQuery, technologies?: string[]) => {
       },
     }),
   }
-  return Project.find({ ...query, ...filter })
+
+  const [projects, total] = await Promise.all([
+    Project.find({ ...queries, ...filter })
+      .sort(sort)
+      .skip(skip)
+      .limit(limit),
+
+    Project.countDocuments({ ...queries, ...filter }),
+  ])
+
+  return {
+    projects,
+    pagination: getPaginationMeta({
+      page,
+      limit,
+      total,
+    }),
+  }
 }
 
 export const getProjectBySlug = (slug: string) => {

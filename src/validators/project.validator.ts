@@ -117,9 +117,19 @@ export const getProjectsValidator = [
     .withMessage('featured must be a boolean')
     .toBoolean(),
 
-  query('role').optional().isString().trim(),
+  query('role')
+    .optional()
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage('role cannot be empty'),
 
-  query('year').optional().isString().trim(),
+  query('year')
+    .optional()
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage('year cannot be empty'),
 
   query('status')
     .optional()
@@ -127,4 +137,21 @@ export const getProjectsValidator = [
     .withMessage('Invalid project status'),
 
   query('technologies').optional().isString().trim(),
+  query('page')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('page must be a positive integer')
+    .toInt(),
+
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 100 })
+    .withMessage('limit must be between 1 and 100')
+    .toInt(),
+  query('sort')
+    .optional()
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage('sort cannot be empty'),
 ]

@@ -6,20 +6,17 @@ import {
   updateProject,
   deleteProject,
 } from '../services/project.service.ts'
+import { getArrayQuery } from '../utils/query.ts'
 
 const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const technologies = req.query.technologies
-      ? String(req.query.technologies)
-          .split(',')
-          .map((tag) => tag.trim())
-          .filter(Boolean)
-      : undefined
-    const projects = await getProjects(req.query, technologies)
+    const technologies = getArrayQuery(req.query.technologies)
+    const result = await getProjects(req.query, technologies)
 
     return res.status(200).json({
       success: true,
-      data: projects,
+      data: result.projects,
+      pagination: result.pagination,
     })
   } catch (error) {
     next(error)
@@ -61,7 +58,7 @@ const post = async (req: Request, res: Response, next: NextFunction) => {
 
 const patchById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const project = await updateProject(req.params.id, req.body)
+    const project = await updateProject(req.params.id as string, req.body)
 
     if (!project) {
       return res.status(404).json({
@@ -81,7 +78,7 @@ const patchById = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const project = await deleteProject(req.params.id)
+    const project = await deleteProject(req.params.id as string)
 
     if (!project) {
       return res.status(404).json({

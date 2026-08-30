@@ -26,6 +26,8 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 
       const token = generateToken(user)
 
+      console.log(user)
+
       res.cookie('access_token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',

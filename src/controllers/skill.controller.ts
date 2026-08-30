@@ -34,7 +34,7 @@ const post = async (req: Request, res: Response, next: NextFunction) => {
 
 const patchById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const skill = await updateSkill(req.params.id, req.body)
+    const skill = await updateSkill(req.params.id as string, req.body)
 
     if (!skill) {
       return res.status(404).json({
@@ -54,7 +54,7 @@ const patchById = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const skill = await deleteSkill(req.params.id)
+    const skill = await deleteSkill(req.params.id as string)
 
     if (!skill) {
       return res.status(404).json({

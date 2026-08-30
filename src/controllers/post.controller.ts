@@ -6,20 +6,17 @@ import {
   updatePost,
   deletePost,
 } from '../services/post.service.ts'
+import { getArrayQuery } from '../utils/query.ts'
 
 const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const tags = req.query.tags
-      ? String(req.query.tags)
-          .split(',')
-          .map((tag) => tag.trim())
-          .filter(Boolean)
-      : undefined
-    const post = await getPosts(req.query, tags)
+    const tags = getArrayQuery(req.query.tags)
+    const result = await getPosts(req.query, tags)
 
     return res.status(200).json({
       success: true,
-      data: post,
+      data: result.posts,
+      pagination: result.pagination,
     })
   } catch (error) {
     next(error)
@@ -61,7 +58,7 @@ const post = async (req: Request, res: Response, next: NextFunction) => {
 
 const patchById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const post = await updatePost(req.params.id, req.body)
+    const post = await updatePost(req.params.id as string, req.body)
 
     if (!post) {
       return res.status(404).json({
@@ -81,7 +78,7 @@ const patchById = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const post = await deletePost(req.params.id)
+    const post = await deletePost(req.params.id as string)
 
     if (!post) {
       return res.status(404).json({

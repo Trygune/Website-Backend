@@ -5,20 +5,17 @@ import {
   updateExperience,
   deleteExperience,
 } from '../services/experience.service.ts'
+import { getArrayQuery } from '../utils/query.ts'
 
 const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const technologies = req.query.technologies
-      ? String(req.query.technologies)
-          .split(',')
-          .map((tag) => tag.trim())
-          .filter(Boolean)
-      : undefined
-    const experience = await getExperiences(req.query, technologies)
+    const technologies = getArrayQuery(req.query.technologies)
+    const result = await getExperiences(req.query, technologies)
 
     return res.status(200).json({
       success: true,
-      data: experience,
+      data: result.experiences,
+      pagination: result.pagination,
     })
   } catch (error) {
     next(error)
@@ -40,7 +37,7 @@ const post = async (req: Request, res: Response, next: NextFunction) => {
 
 const patchById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const experience = await updateExperience(req.params.id, req.body)
+    const experience = await updateExperience(req.params.id as string, req.body)
 
     if (!experience) {
       return res.status(404).json({
@@ -60,7 +57,7 @@ const patchById = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const experience = await deleteExperience(req.params.id)
+    const experience = await deleteExperience(req.params.id as string)
 
     if (!experience) {
       return res.status(404).json({
