@@ -1,5 +1,10 @@
 import Project, { type IProject } from '../models/Project.ts'
-import { getPagination, getPaginationMeta, parseSort } from '../utils/query.ts'
+import {
+  getArrayQuery,
+  getPagination,
+  getPaginationMeta,
+  parseSort,
+} from '../utils/query.ts'
 
 type ProjectQuery = {
   page?: number
@@ -20,12 +25,9 @@ const PROJECT_SORT_FIELDS = [
   'featured',
 ]
 
-export const getProjects = async (
-  query: ProjectQuery,
-  technologies?: string[]
-) => {
+export const getProjects = async (query: ProjectQuery) => {
   const { page, limit, skip } = getPagination(query)
-
+  const technologies = getArrayQuery(query.technologies)
   const sort = parseSort(query.sort, PROJECT_SORT_FIELDS, '-featured -year')
 
   const {

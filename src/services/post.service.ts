@@ -1,4 +1,9 @@
-import { getPagination, getPaginationMeta, parseSort } from '../utils/query.ts'
+import {
+  getArrayQuery,
+  getPagination,
+  getPaginationMeta,
+  parseSort,
+} from '../utils/query.ts'
 import Post, { type IPost } from '../models/Post.ts'
 
 type PostQuery = {
@@ -19,8 +24,9 @@ const POST_SORT_FIELDS = [
   'publishedAt',
 ]
 
-export const getPosts = async (query: PostQuery, tags?: string[]) => {
+export const getPosts = async (query: PostQuery) => {
   const { page, limit, skip } = getPagination(query)
+  const tags = getArrayQuery(query.tags)
 
   const sort = parseSort(query.sort, POST_SORT_FIELDS, '-publishedAt')
 

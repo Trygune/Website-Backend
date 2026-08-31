@@ -7,7 +7,7 @@ const dashboardController = async (
   next: NextFunction
 ) => {
   try {
-    const data = await getDashboardStats()
+    const data = await getDashboardStats(req.query)
 
     if (!data) {
       return res.status(404).json({

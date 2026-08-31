@@ -5,12 +5,10 @@ import {
   updateExperience,
   deleteExperience,
 } from '../services/experience.service.ts'
-import { getArrayQuery } from '../utils/query.ts'
 
 const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const technologies = getArrayQuery(req.query.technologies)
-    const result = await getExperiences(req.query, technologies)
+    const result = await getExperiences(req.query)
 
     return res.status(200).json({
       success: true,

@@ -1,6 +1,29 @@
 import Project from '../models/Project.ts'
 import Post from '../models/Post.ts'
 import Experience from '../models/Experience.ts'
+import { stat } from 'node:fs'
+import { getArrayQuery } from '../utils/query.ts'
+
+type DashboardQuery = {
+  categories?: string
+}
+
+type StatsProps = {
+  projects?: {
+    total: number
+    published: number
+    drafts: number
+  }
+  posts?: {
+    total: number
+    published: number
+    drafts: number
+  }
+  experience?: {
+    total: number
+    current: number
+  }
+}
 
 const projectStats = async () => {
   const [totalProjects, publishedProjects, draftProjects] = await Promise.all([
@@ -27,7 +50,44 @@ const experienceStats = async () => {
 
   return { totalExperience, currentExperience }
 }
-export const getDashboardStats = async () => {
+
+export const getDashboardStats = async (query: DashboardQuery) => {
+  const categories = getArrayQuery(query.categories)
+
+  if (!!categories) {
+    let stats: StatsProps = {}
+    for (const category of categories) {
+      if (category === 'projects') {
+        const { totalProjects, publishedProjects, draftProjects } =
+          await projectStats()
+        const projects = {
+          total: totalProjects,
+          published: publishedProjects,
+          drafts: draftProjects,
+        }
+        stats['projects'] = projects
+      }
+      if (category === 'posts') {
+        const { totalPosts, publishedPosts, draftPosts } = await postStats()
+        const posts = {
+          total: totalPosts,
+          published: publishedPosts,
+          drafts: draftPosts,
+        }
+        stats['posts'] = posts
+      }
+      if (category === 'experience') {
+        const { totalExperience, currentExperience } = await experienceStats()
+        const experience = {
+          total: totalExperience,
+          current: currentExperience,
+        }
+        stats['experience'] = experience
+      }
+    }
+    return stats
+  }
+
   const { totalProjects, publishedProjects, draftProjects } =
     await projectStats()
   const { totalPosts, publishedPosts, draftPosts } = await postStats()

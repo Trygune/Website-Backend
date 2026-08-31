@@ -7,7 +7,6 @@ import { skillRouter } from './routes/skill.routes.ts'
 import { dashboardRouter } from './routes/dashboard.routes.ts'
 import { uploadRouter } from './routes/upload.routes.ts'
 import './config/passport.ts'
-import passport from 'passport'
 import { pinoHttp } from 'pino-http'
 import logger from './utils/logger.ts'
 import errorHandler from './middlewares/error.middleware.ts'
@@ -36,8 +35,6 @@ app.use(express.json())
 app.use(express.urlencoded())
 
 app.use(cookieParser())
-
-app.use(passport.initialize())
 
 app.use(`/api/${apiVersion}/auth`, authRouter)
 app.use(`/api/${apiVersion}/projects`, projectRouter)

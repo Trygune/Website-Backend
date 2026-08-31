@@ -6,12 +6,10 @@ import {
   updateProject,
   deleteProject,
 } from '../services/project.service.ts'
-import { getArrayQuery } from '../utils/query.ts'
 
 const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const technologies = getArrayQuery(req.query.technologies)
-    const result = await getProjects(req.query, technologies)
+    const result = await getProjects(req.query)
 
     return res.status(200).json({
       success: true,

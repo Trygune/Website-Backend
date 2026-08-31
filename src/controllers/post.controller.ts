@@ -6,12 +6,10 @@ import {
   updatePost,
   deletePost,
 } from '../services/post.service.ts'
-import { getArrayQuery } from '../utils/query.ts'
 
 const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const tags = getArrayQuery(req.query.tags)
-    const result = await getPosts(req.query, tags)
+    const result = await getPosts(req.query)
 
     return res.status(200).json({
       success: true,
