@@ -3,6 +3,7 @@ import Post from '../models/Post.ts'
 import Experience from '../models/Experience.ts'
 import { stat } from 'node:fs'
 import { getArrayQuery } from '../utils/query.ts'
+import Skill from '../models/Skill.ts'
 
 type DashboardQuery = {
   categories?: string
@@ -22,6 +23,10 @@ type StatsProps = {
   experience?: {
     total: number
     current: number
+  }
+  skills?: {
+    total: number
+    fetured: number
   }
 }
 
@@ -49,6 +54,14 @@ const experienceStats = async () => {
   ])
 
   return { totalExperience, currentExperience }
+}
+const skillStats = async () => {
+  const [totalSkills, feturedSkills] = await Promise.all([
+    Skill.countDocuments(),
+    Skill.countDocuments({ featured: true }),
+  ])
+
+  return { totalSkills, feturedSkills }
 }
 
 export const getDashboardStats = async (query: DashboardQuery) => {
@@ -84,6 +97,14 @@ export const getDashboardStats = async (query: DashboardQuery) => {
         }
         stats['experience'] = experience
       }
+      if (category === 'skills') {
+        const { totalSkills, feturedSkills } = await skillStats()
+        const skills = {
+          total: totalSkills,
+          fetured: feturedSkills,
+        }
+        stats['skills'] = skills
+      }
     }
     return stats
   }
@@ -92,6 +113,7 @@ export const getDashboardStats = async (query: DashboardQuery) => {
     await projectStats()
   const { totalPosts, publishedPosts, draftPosts } = await postStats()
   const { totalExperience, currentExperience } = await experienceStats()
+  const { totalSkills, feturedSkills } = await skillStats()
   const recentProjects = await Project.find({})
     .sort({ createdAt: -1 })
     .limit(5)
@@ -115,6 +137,10 @@ export const getDashboardStats = async (query: DashboardQuery) => {
     experience: {
       total: totalExperience,
       current: currentExperience,
+    },
+    skills: {
+      total: totalSkills,
+      fetured: feturedSkills,
     },
     recentProjects,
     recentPosts,
