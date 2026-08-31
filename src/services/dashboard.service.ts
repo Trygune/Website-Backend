@@ -26,7 +26,7 @@ type StatsProps = {
   }
   skills?: {
     total: number
-    fetured: number
+    featured: number
   }
 }
 
@@ -101,7 +101,7 @@ export const getDashboardStats = async (query: DashboardQuery) => {
         const { totalSkills, feturedSkills } = await skillStats()
         const skills = {
           total: totalSkills,
-          fetured: feturedSkills,
+          featured: feturedSkills,
         }
         stats['skills'] = skills
       }
@@ -140,7 +140,7 @@ export const getDashboardStats = async (query: DashboardQuery) => {
     },
     skills: {
       total: totalSkills,
-      fetured: feturedSkills,
+      featured: feturedSkills,
     },
     recentProjects,
     recentPosts,
