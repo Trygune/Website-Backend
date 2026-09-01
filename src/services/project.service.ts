@@ -23,6 +23,7 @@ const PROJECT_SORT_FIELDS = [
   'title',
   'year',
   'featured',
+  'status',
 ]
 
 export const getProjects = async (query: ProjectQuery) => {
