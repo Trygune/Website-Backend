@@ -4,6 +4,7 @@ import {
   getExperiences,
   updateExperience,
   deleteExperience,
+  getExperienceById,
 } from '../services/experience.service.ts'
 
 const get = async (req: Request, res: Response, next: NextFunction) => {
@@ -14,6 +15,26 @@ const get = async (req: Request, res: Response, next: NextFunction) => {
       success: true,
       data: result.experiences,
       pagination: result.pagination,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+const getById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const experience = await getExperienceById(req.params.id as string)
+
+    if (!experience) {
+      return res.status(404).json({
+        success: false,
+        message: 'experience not found',
+      })
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: experience,
     })
   } catch (error) {
     next(error)
@@ -72,4 +93,4 @@ const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-export default { get, post, patchById, deleteById }
+export default { get, getById, post, patchById, deleteById }

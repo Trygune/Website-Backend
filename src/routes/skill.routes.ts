@@ -11,6 +11,7 @@ import {
 export const skillRouter = express.Router()
 
 skillRouter.get('/', getSkillsValidator, validator, skillController.get)
+skillRouter.get('/id/:id', skillController.getById)
 
 skillRouter.post(
   '/',
@@ -21,11 +22,11 @@ skillRouter.post(
 )
 
 skillRouter.patch(
-  '/:id',
+  '/id/:id',
   protect,
   updateSkillValidator,
   validator,
   skillController.patchById
 )
 
-skillRouter.delete('/:id', protect, skillController.deleteById)
+skillRouter.delete('/id/:id', protect, skillController.deleteById)

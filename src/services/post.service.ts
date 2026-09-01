@@ -62,6 +62,9 @@ export const getPosts = async (query: PostQuery) => {
 export const getPostBySlug = (slug: string) => {
   return Post.findOne({ slug })
 }
+export const getPostById = (id: string) => {
+  return Post.findById(id)
+}
 
 export const createPost = (data: IPost) => {
   return Post.create({ ...data })

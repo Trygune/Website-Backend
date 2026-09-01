@@ -12,6 +12,7 @@ export const postRouter = express.Router()
 
 postRouter.get('/', getPostsValidator, validator, postController.get)
 postRouter.get('/:slug', postController.getBySlug)
+postRouter.get('/id/:id', postController.getById)
 
 postRouter.post(
   '/',
@@ -21,10 +22,10 @@ postRouter.post(
   postController.post
 )
 postRouter.patch(
-  '/:id',
+  '/id/:id',
   protect,
   updatePostValidator,
   validator,
   postController.patchById
 )
-postRouter.delete('/:id', protect, postController.deleteById)
+postRouter.delete('/id/:id', protect, postController.deleteById)

@@ -70,6 +70,9 @@ export const getExperiences = async (query: ExperienceQuery) => {
     }),
   }
 }
+export const getExperienceById = (id: string) => {
+  return Experience.findById(id)
+}
 
 export const createExperience = (data: IExperience) => {
   return Experience.create({ ...data })

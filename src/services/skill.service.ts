@@ -26,6 +26,10 @@ export const getSkills = (query: SkillQuery) => {
   return Skill.find(queries).sort(sort)
 }
 
+export const getSkillById = (id: string) => {
+  return Skill.findById(id)
+}
+
 export const createSkill = (data: ISkill) => {
   return Skill.create({ ...data })
 }

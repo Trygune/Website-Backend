@@ -70,6 +70,10 @@ export const getProjectBySlug = (slug: string) => {
   return Project.findOne({ slug })
 }
 
+export const getProjectById = (id: string) => {
+  return Project.findById(id)
+}
+
 export const createProject = (data: IProject) => {
   return Project.create({ ...data })
 }

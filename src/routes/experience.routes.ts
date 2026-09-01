@@ -17,6 +17,8 @@ experienceRouter.get(
   experienceController.get
 )
 
+experienceRouter.get('/id/:id', experienceController.getById)
+
 experienceRouter.post(
   '/',
   protect,
@@ -25,10 +27,10 @@ experienceRouter.post(
   experienceController.post
 )
 experienceRouter.patch(
-  '/:id',
+  '/id/:id',
   protect,
   updateExperienceValidator,
   validator,
   experienceController.patchById
 )
-experienceRouter.delete('/:id', protect, experienceController.deleteById)
+experienceRouter.delete('/id/:id', protect, experienceController.deleteById)

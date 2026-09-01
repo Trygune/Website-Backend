@@ -4,11 +4,32 @@ import {
   getSkills,
   updateSkill,
   deleteSkill,
+  getSkillById,
 } from '../services/skill.service.ts'
 
 const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const skill = await getSkills(req.query)
+    const skills = await getSkills(req.query)
+
+    return res.status(200).json({
+      success: true,
+      data: skills,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+const getById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const skill = await getSkillById(req.params.id as string)
+
+    if (!skill) {
+      return res.status(404).json({
+        success: false,
+        message: 'skill not found',
+      })
+    }
 
     return res.status(200).json({
       success: true,
@@ -71,4 +92,4 @@ const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-export default { get, post, patchById, deleteById }
+export default { get, getById, post, patchById, deleteById }
