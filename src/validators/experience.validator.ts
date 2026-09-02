@@ -100,7 +100,12 @@ export const getExperiencesValidator = [
     .isInt({ min: 1 })
     .withMessage('page must be a positive integer')
     .toInt(),
-
+  query('search')
+    .optional()
+    .isString()
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage('Search must not be empty'),
   query('limit')
     .optional()
     .isInt({ min: 1, max: 100 })

@@ -147,6 +147,13 @@ export const getProjectsValidator = [
     .isIn(['draft', 'published'])
     .withMessage('Invalid project status'),
 
+  query('search')
+    .optional()
+    .isString()
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage('Search must not be empty'),
+
   query('technologies').optional().isString().trim(),
   query('page')
     .optional()

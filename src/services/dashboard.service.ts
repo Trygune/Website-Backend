@@ -2,7 +2,7 @@ import Project from '../models/Project.ts'
 import Post from '../models/Post.ts'
 import Experience from '../models/Experience.ts'
 import { stat } from 'node:fs'
-import { getArrayQuery } from '../utils/query.ts'
+import { parseArrayQuery } from '../utils/query.ts'
 import Skill from '../models/Skill.ts'
 
 type DashboardQuery = {
@@ -65,7 +65,7 @@ const skillStats = async () => {
 }
 
 export const getDashboardStats = async (query: DashboardQuery) => {
-  const categories = getArrayQuery(query.categories)
+  const categories = parseArrayQuery(query.categories)
 
   if (!!categories) {
     let stats: StatsProps = {}

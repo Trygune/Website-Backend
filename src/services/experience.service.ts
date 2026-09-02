@@ -1,15 +1,13 @@
-import {
-  getArrayQuery,
-  getPagination,
-  getPaginationMeta,
-  parseSort,
-} from '../utils/query.ts'
 import Experience, { type IExperience } from '../models/Experience.ts'
+import buildExperienceQuery from '../queries/experience.query.ts'
+import { getPagination, getPaginationMeta } from '../utils/pagination.ts'
+import { parseSort } from '../utils/sort.ts'
 
-type ExperienceQuery = {
+export type ExperienceQuery = {
   page?: number
   limit?: number
   sort?: string
+  search?: string
   current?: boolean
   type?: string
   location?: string
@@ -32,33 +30,13 @@ const EXPERIENCE_SORT_FIELDS = [
 
 export const getExperiences = async (query: ExperienceQuery) => {
   const { page, limit, skip } = getPagination(query)
-  const technologies = getArrayQuery(query.technologies)
-
   const sort = parseSort(query.sort, EXPERIENCE_SORT_FIELDS, '-startDate')
-
-  const {
-    page: _,
-    limit: __,
-    sort: ___,
-    technologies: ____,
-    ...queries
-  } = query
-
-  const filter = {
-    ...(technologies?.length && {
-      technologies: {
-        $all: technologies,
-      },
-    }),
-  }
+  const mongoQuery = buildExperienceQuery(query)
 
   const [experiences, total] = await Promise.all([
-    Experience.find({ ...queries, ...filter })
-      .sort(sort)
-      .skip(skip)
-      .limit(limit),
+    Experience.find(mongoQuery).sort(sort).skip(skip).limit(limit),
 
-    Experience.countDocuments({ ...queries, ...filter }),
+    Experience.countDocuments(mongoQuery),
   ])
 
   return {

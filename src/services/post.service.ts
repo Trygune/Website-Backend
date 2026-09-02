@@ -1,17 +1,16 @@
-import {
-  getArrayQuery,
-  getPagination,
-  getPaginationMeta,
-  parseSort,
-} from '../utils/query.ts'
+import { getPagination, getPaginationMeta } from '../utils/pagination.ts'
 import Post, { type IPost } from '../models/Post.ts'
+import { parseSort } from '../utils/sort.ts'
+import buildPostQuery from '../queries/post.query.ts'
 
-type PostQuery = {
+export type PostQuery = {
   page?: number
   limit?: number
   sort?: string
+  search?: string
   category?: string
   tags?: string
+  readTime?: string
   status?: 'draft' | 'published'
 }
 
@@ -26,27 +25,13 @@ const POST_SORT_FIELDS = [
 
 export const getPosts = async (query: PostQuery) => {
   const { page, limit, skip } = getPagination(query)
-  const tags = getArrayQuery(query.tags)
-
   const sort = parseSort(query.sort, POST_SORT_FIELDS, '-publishedAt')
-
-  const { page: _, limit: __, sort: ___, tags: ____, ...queries } = query
-
-  const filter = {
-    ...(tags?.length && {
-      tags: {
-        $all: tags,
-      },
-    }),
-  }
+  const mongoQuery = buildPostQuery(query)
 
   const [posts, total] = await Promise.all([
-    Post.find({ ...queries, ...filter })
-      .sort(sort)
-      .skip(skip)
-      .limit(limit),
+    Post.find(mongoQuery).sort(sort).skip(skip).limit(limit),
 
-    Post.countDocuments({ ...queries, ...filter }),
+    Post.countDocuments(mongoQuery),
   ])
 
   return {

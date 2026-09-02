@@ -113,7 +113,12 @@ export const getSkillsValidator = [
     .isBoolean()
     .withMessage('featured must be a boolean')
     .toBoolean(),
-
+  query('search')
+    .optional()
+    .isString()
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage('Search must not be empty'),
   query('category').optional().isString().trim(),
 
   query('level')

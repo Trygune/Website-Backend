@@ -1,8 +1,10 @@
 import Skill, { type ISkill } from '../models/Skill.ts'
-import { parseSort } from '../utils/query.ts'
+import buildSkillQuery from '../queries/skill.query.ts'
+import { parseSort } from '../utils/sort.ts'
 
-type SkillQuery = {
+export type SkillQuery = {
   sort?: string
+  search?: string
   featured?: boolean
   category?: string
   level?: 'Beginner' | 'Intermediate' | 'Advanced'
@@ -21,9 +23,9 @@ const SKILL_SORT_FIELDS = [
 
 export const getSkills = (query: SkillQuery) => {
   const sort = parseSort(query.sort, SKILL_SORT_FIELDS, 'order')
-  const { sort: _, ...queries } = query
+  const mongoQuery = buildSkillQuery(query)
 
-  return Skill.find(queries).sort(sort)
+  return Skill.find(mongoQuery).sort(sort)
 }
 
 export const getSkillById = (id: string) => {

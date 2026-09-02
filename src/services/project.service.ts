@@ -1,15 +1,13 @@
 import Project, { type IProject } from '../models/Project.ts'
-import {
-  getArrayQuery,
-  getPagination,
-  getPaginationMeta,
-  parseSort,
-} from '../utils/query.ts'
+import buildProjectQuery from '../queries/project.query.ts'
+import { getPagination, getPaginationMeta } from '../utils/pagination.ts'
+import { parseSort } from '../utils/sort.ts'
 
-type ProjectQuery = {
+export type ProjectQuery = {
   page?: number
   limit?: number
   sort?: string
+  search?: string
   featured?: boolean
   status?: 'draft' | 'published'
   role?: string
@@ -28,32 +26,13 @@ const PROJECT_SORT_FIELDS = [
 
 export const getProjects = async (query: ProjectQuery) => {
   const { page, limit, skip } = getPagination(query)
-  const technologies = getArrayQuery(query.technologies)
   const sort = parseSort(query.sort, PROJECT_SORT_FIELDS, '-featured -year')
-
-  const {
-    page: _,
-    limit: __,
-    sort: ___,
-    technologies: ____,
-    ...queries
-  } = query
-
-  const filter = {
-    ...(technologies?.length && {
-      technologies: {
-        $all: technologies,
-      },
-    }),
-  }
+  const mongoQuery = buildProjectQuery(query)
 
   const [projects, total] = await Promise.all([
-    Project.find({ ...queries, ...filter })
-      .sort(sort)
-      .skip(skip)
-      .limit(limit),
+    Project.find(mongoQuery).sort(sort).skip(skip).limit(limit),
 
-    Project.countDocuments({ ...queries, ...filter }),
+    Project.countDocuments(mongoQuery),
   ])
 
   return {
