@@ -21,7 +21,13 @@ export const createProjectValidator = [
 
   body('fullDescription').optional().trim(),
 
-  body('technologies').isArray().withMessage('Technologies must be an array'),
+  body('technologies').custom((value) => {
+    if (typeof value === 'string' || Array.isArray(value)) {
+      return true
+    }
+
+    throw new Error('Technologies must be a string or an array')
+  }),
 
   body('technologies.*')
     .trim()
@@ -78,8 +84,13 @@ export const updateProjectValidator = [
 
   body('technologies')
     .optional()
-    .isArray()
-    .withMessage('Technologies must be an array'),
+    .custom((value) => {
+      if (typeof value === 'string' || Array.isArray(value)) {
+        return true
+      }
+
+      throw new Error('Technologies must be a string or an array')
+    }),
 
   body('technologies.*')
     .optional()

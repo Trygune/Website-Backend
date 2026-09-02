@@ -30,7 +30,13 @@ export const createPostValidator = [
 
   body('category').trim().notEmpty().withMessage('Category is required'),
 
-  body('tags').isArray().withMessage('Tags must be an array'),
+  body('tags').custom((value) => {
+    if (typeof value === 'string' || Array.isArray(value)) {
+      return true
+    }
+
+    throw new Error('Tags must be a string or an array')
+  }),
 
   body('tags.*').trim().notEmpty().withMessage('Tag cannot be empty'),
 
@@ -84,7 +90,15 @@ export const updatePostValidator = [
     .notEmpty()
     .withMessage('Category cannot be empty'),
 
-  body('tags').optional().isArray().withMessage('Tags must be an array'),
+  body('tags')
+    .optional()
+    .custom((value) => {
+      if (typeof value === 'string' || Array.isArray(value)) {
+        return true
+      }
+
+      throw new Error('Tags must be a string or an array')
+    }),
 
   body('tags.*')
     .optional()

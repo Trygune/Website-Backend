@@ -7,6 +7,7 @@ import {
   updatePostValidator,
   getPostsValidator,
 } from '../validators/post.validator.ts'
+import upload from '../middlewares/upload.middleware.ts'
 
 export const postRouter = express.Router()
 
@@ -17,6 +18,7 @@ postRouter.get('/id/:id', postController.getById)
 postRouter.post(
   '/',
   protect,
+  upload.single('coverImage'),
   createPostValidator,
   validator,
   postController.post
@@ -24,6 +26,7 @@ postRouter.post(
 postRouter.patch(
   '/id/:id',
   protect,
+  upload.single('coverImage'),
   updatePostValidator,
   validator,
   postController.patchById

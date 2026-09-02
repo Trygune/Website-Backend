@@ -8,6 +8,6 @@ export const uploadRouter = express.Router()
 uploadRouter.post(
   '/image',
   protect,
-  upload.single('image'),
+  upload.single('coverImage'),
   uploadController.uploadImage
 )
