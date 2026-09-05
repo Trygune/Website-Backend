@@ -13,10 +13,13 @@ import errorHandler from './middlewares/error.middleware.ts'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import contactRouter from './routes/contact.routes.ts'
+import helmet from 'helmet'
 
 const apiVersion = process.env.API_VERSION
 
 const app: Express = express()
+
+app.set('trust proxy', 1)
 
 app.use(
   pinoHttp({
@@ -24,16 +27,18 @@ app.use(
   })
 )
 
+app.use(helmet())
+
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL,
     credentials: true,
   })
 )
 
 app.use(express.static('public'))
-app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.json({ limit: '100kb' }))
+app.use(express.urlencoded({ limit: '100kb', extended: true }))
 
 app.use(cookieParser())
 

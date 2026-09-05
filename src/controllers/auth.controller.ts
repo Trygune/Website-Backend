@@ -8,13 +8,12 @@ import { hashPassword } from '../utils/auth.ts'
 
 const forgot = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await User.findOne({ email: req.body.email }).select(
-      '-password'
-    )
+    const user = await User.findOne({ email: req.body.email })
     if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: 'User not found',
+      return res.status(200).json({
+        success: true,
+        message:
+          'If an account with that email exists, you will receive a password reset link.',
       })
     }
     const resetToken = crypto.randomBytes(32).toString('hex')
