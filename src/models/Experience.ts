@@ -2,7 +2,7 @@ import mongoose, { type HydratedDocument } from 'mongoose'
 
 export interface IExperience {
   id: string
-  role: strings
+  role: string
   company: string
   type: string
   description: string

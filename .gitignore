@@ -11,3 +11,7 @@
 
 # typescript
 *.tsbuildinfo
+
+# seed
+
+seed.ts

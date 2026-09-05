@@ -10,7 +10,8 @@
   "main": "app.js",
   "scripts": {
     "start": "tsx --env-file=variables.env ./server.ts",
-    "watch": "tsx --env-file=variables.env --watch ./server.ts"
+    "watch": "tsx --env-file=variables.env --watch ./server.ts",
+    "seed": "tsx --env-file=variables.env ./src/seed.ts"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
