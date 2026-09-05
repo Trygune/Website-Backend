@@ -1,7 +1,8 @@
 import mongoose, { type HydratedDocument } from 'mongoose'
 
 export interface IExperience {
-  role: string
+  id: string
+  role: strings
   company: string
   type: string
   description: string
@@ -33,8 +34,6 @@ const experienceSchema = new mongoose.Schema<IExperience>(
     responsibilities: [String],
     location: String,
     companyUrl: String,
-    createdAt: Date,
-    updatedAt: Date,
   },
   { timestamps: true }
 )

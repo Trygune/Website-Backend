@@ -2,6 +2,7 @@ import type { HydratedDocument } from 'mongoose'
 import mongoose from 'mongoose'
 
 export interface IProject {
+  id: string
   title: string
   slug: string
   description: string
@@ -28,28 +29,26 @@ export type ProjectDocument = HydratedDocument<IProject>
 
 const projectSchema = new mongoose.Schema<IProject>(
   {
-    title: String,
-    slug: String,
-    description: String,
-    fullDescription: String,
-    role: String,
-    year: String,
+    title: { type: String },
+    slug: { type: String },
+    description: { type: String },
+    fullDescription: { type: String },
+    role: { type: String },
+    year: { type: String },
     technologies: [String],
-    overview: String,
+    overview: { type: String },
     features: [String],
     challengesSolutions: [
       {
-        challenge: String,
-        solution: String,
+        challenge: { type: String },
+        solution: { type: String },
       },
     ],
-    coverImage: String,
-    githubUrl: String,
-    liveUrl: String,
-    featured: Boolean,
-    status: String,
-    createdAt: Date,
-    updatedAt: Date,
+    coverImage: { type: String },
+    githubUrl: { type: String },
+    liveUrl: { type: String },
+    featured: { type: Boolean },
+    status: { type: String },
   },
   { timestamps: true }
 )

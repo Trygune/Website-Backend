@@ -12,6 +12,7 @@ import logger from './utils/logger.ts'
 import errorHandler from './middlewares/error.middleware.ts'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import contactRouter from './routes/contact.routes.ts'
 
 const apiVersion = process.env.API_VERSION
 
@@ -43,6 +44,7 @@ app.use(`/api/${apiVersion}/experiences`, experienceRouter)
 app.use(`/api/${apiVersion}/skills`, skillRouter)
 app.use(`/api/${apiVersion}/dashboard`, dashboardRouter)
 app.use(`/api/${apiVersion}/uploads`, uploadRouter)
+app.use(`/api/${apiVersion}/contact`, contactRouter)
 
 app.use(errorHandler.notFoundHandler)
 

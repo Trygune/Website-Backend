@@ -1,6 +1,7 @@
 import mongoose, { type HydratedDocument } from 'mongoose'
 
 export interface IPost {
+  id: string
   title: string
   slug: string
   excerpt: string
@@ -29,8 +30,6 @@ const postSchema = new mongoose.Schema<IPost>(
     tags: [String],
     status: String,
     publishedAt: Date,
-    createdAt: Date,
-    updatedAt: Date,
   },
   { timestamps: true }
 )
