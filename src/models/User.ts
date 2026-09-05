@@ -4,6 +4,8 @@ export interface IUser {
   username: string
   email: string
   password: string
+  resetPasswordToken?: string | null
+  resetPasswordExpires?: Date | null
   role: 'ADMIN'
 }
 
@@ -19,6 +21,8 @@ export const userSchema = new mongoose.Schema<IUser>({
     unique: true,
   },
   password: { type: String, required: true },
+  resetPasswordToken: { type: String, default: null },
+  resetPasswordExpires: { type: Date, default: null },
   role: { type: String, enum: ['ADMIN'], default: 'ADMIN' },
 })
 

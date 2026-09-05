@@ -1,7 +1,75 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import User from '../models/User.ts'
 import passport from 'passport'
-import { generateToken } from '../services/auth.service.ts'
+import crypto from 'node:crypto'
+import { sendPasswordResetEmail } from '../services/email.service.ts'
+import { generateToken, hashResetToken } from '../services/auth.service.ts'
+import { hashPassword } from '../utils/auth.ts'
+
+const forgot = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const user = await User.findOne({ email: req.body.email }).select(
+      '-password'
+    )
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      })
+    }
+    const resetToken = crypto.randomBytes(32).toString('hex')
+    const hashedToken = hashResetToken(resetToken)
+    const resetTokenExpires = new Date(Date.now() + 15 * 60 * 1000)
+    user.resetPasswordToken = hashedToken
+    user.resetPasswordExpires = resetTokenExpires
+    await user.save()
+
+    const resetUrl = `${process.env.FRONTEND_URL}/admin/reset-password/${resetToken}`
+
+    await sendPasswordResetEmail(user.email, resetUrl)
+    return res.status(200).json({
+      success: true,
+      message:
+        'If an account with that email exists, you will receive a password reset link.',
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+const reset = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { token } = req.params
+    const { password } = req.body
+    const hashedToken = hashResetToken(token as string)
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: {
+        $gt: new Date(),
+      },
+    })
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired reset token',
+      })
+    }
+
+    user.password = await hashPassword(password)
+    user.resetPasswordToken = null
+    user.resetPasswordExpires = null
+
+    await user.save()
+
+    return res.status(200).json({
+      success: true,
+      message: 'Password reset successfully',
+    })
+  } catch (error) {
+    next(error)
+  }
+}
 
 const login = (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate(
@@ -25,8 +93,6 @@ const login = (req: Request, res: Response, next: NextFunction) => {
       }
 
       const token = generateToken(user)
-
-      console.log(user)
 
       res.cookie('access_token', token, {
         httpOnly: true,
@@ -83,6 +149,8 @@ const getMe = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 export default {
+  forgot,
+  reset,
   login,
   logout,
   getMe,
