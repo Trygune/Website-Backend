@@ -42,6 +42,12 @@ app.use(express.urlencoded({ limit: '100kb', extended: true }))
 
 app.use(cookieParser())
 
+app.get('/', (_req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Backend is running',
+  })
+})
 app.use(`/api/${apiVersion}/auth`, authRouter)
 app.use(`/api/${apiVersion}/projects`, projectRouter)
 app.use(`/api/${apiVersion}/posts`, postRouter)
