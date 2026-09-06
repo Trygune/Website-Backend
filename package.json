@@ -12,6 +12,7 @@
     "dev": "tsx --env-file=variables.env --watch ./src/server.ts",
     "build": "tsc",
     "start": "node ./dist/server.js",
+    "sdev": "node --env-file=variables.env ./dist/server.js",
     "seed": "tsx --env-file=variables.env ./src/seed.ts"
   },
   "dependencies": {

@@ -96,7 +96,7 @@ const login = (req: Request, res: Response, next: NextFunction) => {
       res.cookie('access_token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'none',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         maxAge: 7 * 24 * 60 * 60 * 1000,
       })
 
@@ -118,7 +118,7 @@ const logout = (req: Request, res: Response) => {
   res.clearCookie('access_token', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   })
 
   return res.status(200).json({
@@ -129,12 +129,19 @@ const logout = (req: Request, res: Response) => {
 
 const getMe = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await User.findById(req.user!.id).select('-password')
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized',
+      })
+    }
+
+    const user = await User.findById(req.user.id).select('-password')
 
     if (!user) {
-      return res.status(404).json({
+      return res.status(401).json({
         success: false,
-        message: 'User not found',
+        message: 'Unauthorized',
       })
     }
 
