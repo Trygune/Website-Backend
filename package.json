@@ -9,8 +9,9 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "start": "tsx --env-file=variables.env ./server.ts",
-    "watch": "tsx --env-file=variables.env --watch ./server.ts",
+    "watch": "tsx --env-file=variables.env --watch ./src/server.ts",
+    "build": "tsc",
+    "start": "node  --env-file=variables.env ./dist/server.js",
     "seed": "tsx --env-file=variables.env ./src/seed.ts"
   },
   "dependencies": {
@@ -42,6 +43,7 @@
     "@types/multer": "^2.2.0",
     "@types/node": "^26.3.0",
     "@types/passport": "^1.0.17",
+    "@types/passport-local": "^1.0.38",
     "eslint": "^10.9.1",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.11.0",

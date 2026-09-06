@@ -55,10 +55,11 @@ const contactMessageSchema = new Schema<IContactMessage>(
 contactMessageSchema.set('toJSON', {
   transform: (_doc, ret) => {
     ret.id = ret._id.toString()
-    delete ret._id
-    delete ret.__v
+    const result = ret as unknown as Record<string, unknown>
+    delete result._id
+    delete result.__v
 
-    return ret
+    return result
   },
 })
 

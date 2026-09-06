@@ -129,7 +129,7 @@ const logout = (req: Request, res: Response) => {
 
 const getMe = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await User.findById(req.user.id).select('-password')
+    const user = await User.findById(req.user!.id).select('-password')
 
     if (!user) {
       return res.status(404).json({

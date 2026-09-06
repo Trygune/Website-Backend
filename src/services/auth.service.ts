@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import jwt, { type SignOptions } from 'jsonwebtoken'
 import crypto from 'node:crypto'
 
 export const generateToken = (user: Express.User) => {
@@ -14,8 +14,8 @@ export const generateToken = (user: Express.User) => {
     },
     privateKey,
     {
-      algorithm: 'HS256',
-      expiresIn: process.env.JWT_EXPIRES_IN || '7d',
+      expiresIn:
+        (process.env.JWT_EXPIRES_IN as SignOptions['expiresIn']) || '7d',
     }
   )
 }

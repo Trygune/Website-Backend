@@ -1,6 +1,6 @@
-import app from './src/app.ts'
-import connectMongoDB from './src/config/db.ts'
-import logger from './src/utils/logger.ts'
+import app from './app.ts'
+import connectMongoDB from './config/db.ts'
+import logger from './utils/logger.ts'
 import dns from 'node:dns'
 
 const port = Number(process.env.PORT)

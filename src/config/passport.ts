@@ -1,5 +1,5 @@
 import passport from 'passport'
-import LocalStrategy from 'passport-local'
+import { Strategy as LocalStrategy } from 'passport-local'
 import logger from '../utils/logger.ts'
 import User from '../models/User.ts'
 import { validatePassword } from '../utils/auth.ts'
@@ -22,7 +22,7 @@ passport.use(
       return cb(null, user)
     } catch (error) {
       logger.error(error)
-      return cb(error, null)
+      return cb(error, undefined)
     }
   })
 )
