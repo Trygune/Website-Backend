@@ -9,9 +9,9 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "watch": "tsx --env-file=variables.env --watch ./src/server.ts",
+    "dev": "tsx --env-file=variables.env --watch ./src/server.ts",
     "build": "tsc",
-    "start": "node  --env-file=variables.env ./dist/server.js",
+    "start": "node ./dist/server.js",
     "seed": "tsx --env-file=variables.env ./src/seed.ts"
   },
   "dependencies": {
