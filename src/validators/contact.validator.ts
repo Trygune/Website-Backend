@@ -1,5 +1,6 @@
 import { body } from 'express-validator'
 
+export const updateContactValidator = [body('isRead').isBoolean()]
 export const createContactValidator = [
   body('name')
     .trim()

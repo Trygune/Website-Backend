@@ -4,6 +4,7 @@ import Experience from '../models/Experience.ts'
 import { stat } from 'node:fs'
 import { parseArrayQuery } from '../utils/query.ts'
 import Skill from '../models/Skill.ts'
+import ContactMessage from '../models/ContactMessage.ts'
 
 type DashboardQuery = {
   categories?: string
@@ -64,6 +65,15 @@ const skillStats = async () => {
   return { totalSkills, feturedSkills }
 }
 
+const messageStats = async () => {
+  const [totalMessages, unreadMessages] = await Promise.all([
+    ContactMessage.countDocuments(),
+    ContactMessage.countDocuments({ isRead: false }),
+  ])
+
+  return { totalMessages, unreadMessages }
+}
+
 export const getDashboardStats = async (query: DashboardQuery) => {
   const categories = parseArrayQuery(query.categories)
 
@@ -114,6 +124,7 @@ export const getDashboardStats = async (query: DashboardQuery) => {
   const { totalPosts, publishedPosts, draftPosts } = await postStats()
   const { totalExperience, currentExperience } = await experienceStats()
   const { totalSkills, feturedSkills } = await skillStats()
+  const { totalMessages, unreadMessages } = await messageStats()
   const recentProjects = await Project.find({})
     .sort({ createdAt: -1 })
     .limit(5)
@@ -122,6 +133,10 @@ export const getDashboardStats = async (query: DashboardQuery) => {
     .sort({ createdAt: -1 })
     .limit(5)
     .select('title slug category status publishedAt createdAt')
+  const recentMessages = await ContactMessage.find({})
+    .sort({ createdAt: -1 })
+    .limit(5)
+    .select('name email subject isRead createdAt')
 
   return {
     projects: {
@@ -142,7 +157,12 @@ export const getDashboardStats = async (query: DashboardQuery) => {
       total: totalSkills,
       featured: feturedSkills,
     },
+    messages: {
+      total: totalMessages,
+      unread: unreadMessages,
+    },
     recentProjects,
+    recentMessages,
     recentPosts,
   }
 }
