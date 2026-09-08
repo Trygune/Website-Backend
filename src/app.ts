@@ -14,6 +14,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import contactRouter from './routes/contact.routes.ts'
 import helmet from 'helmet'
+import analyticsRouter from './routes/analytics.routes.ts'
 
 const apiVersion = process.env.API_VERSION
 
@@ -56,6 +57,7 @@ app.use(`/api/${apiVersion}/skills`, skillRouter)
 app.use(`/api/${apiVersion}/dashboard`, dashboardRouter)
 app.use(`/api/${apiVersion}/uploads`, uploadRouter)
 app.use(`/api/${apiVersion}/contact`, contactRouter)
+app.use(`/api/${apiVersion}/analytics`, analyticsRouter)
 
 app.use(errorHandler.notFoundHandler)
 
