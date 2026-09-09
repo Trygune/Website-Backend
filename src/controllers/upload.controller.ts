@@ -1,5 +1,5 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import { processAndSaveImage } from '../services/upload.service.ts'
+import { processAndSaveImage, removeImage } from '../services/upload.service.ts'
 const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!req.file) {
@@ -9,14 +9,23 @@ const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
       })
     }
 
-    const image = await processAndSaveImage(req.file.buffer)
+    const result = await processAndSaveImage(req.file.buffer, req.query)
     return res.status(201).json({
       success: true,
-      data: image,
+      data: result,
     })
   } catch (error) {
     next(error)
   }
 }
 
-export default { uploadImage }
+const deleteImage = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await removeImage(String(req.params.id), req.query)
+    return res.status(200).json(result)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export default { uploadImage, deleteImage }

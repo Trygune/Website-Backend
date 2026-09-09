@@ -11,3 +11,5 @@ uploadRouter.post(
   upload.single('coverImage'),
   uploadController.uploadImage
 )
+
+uploadRouter.delete('/image/delete/:id', protect, uploadController.deleteImage)
