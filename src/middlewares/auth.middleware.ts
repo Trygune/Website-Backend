@@ -12,7 +12,8 @@ const protect = (req: Request, res: Response, next: NextFunction) => {
 
   if (!token) {
     logger.warn('Authentication is required')
-    res.status(401).json({
+
+    return res.status(401).json({
       success: false,
       message: 'Authentication required',
     })
@@ -41,12 +42,7 @@ const protect = (req: Request, res: Response, next: NextFunction) => {
 
     next()
   } catch (error) {
-    logger.warn('Invalid or expired access token')
-
-    res.status(401).json({
-      success: false,
-      message: 'Authentication not provided',
-    })
+    next(error)
   }
 }
 
