@@ -2,6 +2,7 @@ import Project, { type IProject } from '../models/Project.ts'
 import buildProjectQuery from '../queries/project.query.ts'
 import { getPagination, getPaginationMeta } from '../utils/pagination.ts'
 import { parseSort } from '../utils/sort.ts'
+import { removeImage } from './upload.service.ts'
 
 export type ProjectQuery = {
   page?: number
@@ -64,6 +65,18 @@ export const updateProject = (id: string, data: Partial<IProject>) => {
   })
 }
 
-export const deleteProject = (id: string) => {
-  return Project.findByIdAndDelete(id)
+export const deleteProject = async (id: string) => {
+  const project = await Project.findById(id)
+
+  if (!project) {
+    return null
+  }
+
+  if (project.coverImage?.publicId) {
+    await removeImage(project.coverImage.publicId)
+  }
+
+  await Project.findByIdAndDelete(id)
+
+  return project
 }

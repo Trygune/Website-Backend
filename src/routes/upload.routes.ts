@@ -12,4 +12,4 @@ uploadRouter.post(
   uploadController.uploadImage
 )
 
-uploadRouter.delete('/image/delete/:id', protect, uploadController.deleteImage)
+uploadRouter.delete('/image', protect, uploadController.deleteImage)

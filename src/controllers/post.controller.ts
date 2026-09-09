@@ -63,7 +63,13 @@ const getById = async (req: Request, res: Response, next: NextFunction) => {
 
 const post = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const post = await createPost(req.body)
+    const data = {
+      ...req.body,
+      coverImage: req.body.coverImage
+        ? JSON.parse(req.body.coverImage)
+        : undefined,
+    }
+    const post = await createPost(data)
 
     return res.status(201).json({
       success: true,
@@ -76,7 +82,13 @@ const post = async (req: Request, res: Response, next: NextFunction) => {
 
 const patchById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const post = await updatePost(req.params.id as string, req.body)
+    const data = {
+      ...req.body,
+      coverImage: req.body.coverImage
+        ? JSON.parse(req.body.coverImage)
+        : undefined,
+    }
+    const post = await updatePost(req.params.id as string, data)
 
     if (!post) {
       return res.status(404).json({

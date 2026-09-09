@@ -7,7 +7,10 @@ export interface IPost {
   excerpt: string
   content: string
   readTime: string
-  coverImage: string
+  coverImage: {
+    url: string
+    publicId: string
+  }
   category: string
   tags: string[]
   status: string
@@ -25,7 +28,10 @@ const postSchema = new mongoose.Schema<IPost>(
     excerpt: String,
     content: String,
     readTime: String,
-    coverImage: String,
+    coverImage: {
+      url: { type: String },
+      publicId: { type: String },
+    },
     category: String,
     tags: [String],
     status: String,
@@ -37,7 +43,9 @@ const postSchema = new mongoose.Schema<IPost>(
 postSchema.set('toJSON', {
   transform: (_doc, ret) => {
     ret.id = ret._id.toString()
+
     const result = ret as unknown as Record<string, unknown>
+
     delete result._id
     delete result.__v
 

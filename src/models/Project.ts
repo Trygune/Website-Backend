@@ -16,7 +16,10 @@ export interface IProject {
     challenge: string
     solution: string
   }[]
-  coverImage: string
+  coverImage: {
+    url: string
+    publicId: string
+  }
   githubUrl: string
   liveUrl: string
   featured: boolean
@@ -44,7 +47,10 @@ const projectSchema = new mongoose.Schema<IProject>(
         solution: { type: String },
       },
     ],
-    coverImage: { type: String },
+    coverImage: {
+      url: { type: String },
+      publicId: { type: String },
+    },
     githubUrl: { type: String },
     liveUrl: { type: String },
     featured: { type: Boolean },
@@ -56,7 +62,9 @@ const projectSchema = new mongoose.Schema<IProject>(
 projectSchema.set('toJSON', {
   transform: (_doc, ret) => {
     ret.id = ret._id.toString()
+
     const result = ret as unknown as Record<string, unknown>
+
     delete result._id
     delete result.__v
 

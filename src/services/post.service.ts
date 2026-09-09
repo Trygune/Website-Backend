@@ -2,6 +2,7 @@ import { getPagination, getPaginationMeta } from '../utils/pagination.ts'
 import Post, { type IPost } from '../models/Post.ts'
 import { parseSort } from '../utils/sort.ts'
 import buildPostQuery from '../queries/post.query.ts'
+import { removeImage } from './upload.service.ts'
 
 export type PostQuery = {
   page?: number
@@ -62,6 +63,18 @@ export const updatePost = (id: string, data: Partial<IPost>) => {
   })
 }
 
-export const deletePost = (id: string) => {
-  return Post.findByIdAndDelete(id)
+export const deletePost = async (id: string) => {
+  const post = await Post.findById(id)
+
+  if (!post) {
+    return null
+  }
+
+  if (post.coverImage?.publicId) {
+    await removeImage(post.coverImage.publicId)
+  }
+
+  await Post.findByIdAndDelete(id)
+
+  return post
 }

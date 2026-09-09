@@ -64,7 +64,13 @@ const getById = async (req: Request, res: Response, next: NextFunction) => {
 
 const post = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const project = await createProject(req.body)
+    const data = {
+      ...req.body,
+      coverImage: req.body.coverImage
+        ? JSON.parse(req.body.coverImage)
+        : undefined,
+    }
+    const project = await createProject(data)
 
     return res.status(201).json({
       success: true,
@@ -77,7 +83,13 @@ const post = async (req: Request, res: Response, next: NextFunction) => {
 
 const patchById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const project = await updateProject(req.params.id as string, req.body)
+    const data = {
+      ...req.body,
+      coverImage: req.body.coverImage
+        ? JSON.parse(req.body.coverImage)
+        : undefined,
+    }
+    const project = await updateProject(req.params.id as string, data)
 
     if (!project) {
       return res.status(404).json({
