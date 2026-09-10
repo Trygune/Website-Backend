@@ -15,5 +15,7 @@ dist/
 *.tsbuildinfo
 
 # seed
-
 seed.ts
+
+# Vitest reports and artifacts
+.vitest/

@@ -6,3 +6,7 @@ export const parseArrayQuery = (arrayQuery: unknown) => {
         .filter(Boolean)
     : undefined
 }
+
+export const escapeRegex = (value: string) => {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}

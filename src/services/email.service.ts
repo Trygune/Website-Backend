@@ -2,8 +2,6 @@ import { Resend } from 'resend'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 const templatePath = path.join(
   process.cwd(),
   'src',
@@ -23,6 +21,8 @@ export const sendPasswordResetEmail = async (
   email: string,
   resetUrl: string
 ) => {
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
   const html = await getResetPasswordTemplate(resetUrl)
 
   const { data, error } = await resend.emails.send({

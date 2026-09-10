@@ -1,5 +1,5 @@
 import type { PostQuery } from '../services/post.service.ts'
-import { parseArrayQuery } from '../utils/query.ts'
+import { escapeRegex, parseArrayQuery } from '../utils/query.ts'
 
 const buildPostQuery = (query: PostQuery) => {
   const tags = parseArrayQuery(query.tags)
@@ -22,13 +22,14 @@ const buildPostQuery = (query: PostQuery) => {
   }
 
   if (query.search) {
+    const search = escapeRegex(query.search)
     mongoQuery.$or = [
-      { title: { $regex: query.search, $options: 'i' } },
-      { excerpt: { $regex: query.search, $options: 'i' } },
-      { content: { $regex: query.search, $options: 'i' } },
-      { category: { $regex: query.search, $options: 'i' } },
-      { readTime: { $regex: query.search, $options: 'i' } },
-      { tags: { $regex: query.search, $options: 'i' } },
+      { title: { $regex: search, $options: 'i' } },
+      { excerpt: { $regex: search, $options: 'i' } },
+      { content: { $regex: search, $options: 'i' } },
+      { category: { $regex: search, $options: 'i' } },
+      { readTime: { $regex: search, $options: 'i' } },
+      { tags: { $regex: search, $options: 'i' } },
     ]
   }
 
